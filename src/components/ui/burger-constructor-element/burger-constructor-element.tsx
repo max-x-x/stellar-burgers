@@ -1,4 +1,5 @@
 import React, { FC, memo } from 'react';
+import clsx from 'clsx';
 import styles from './burger-constructor-element.module.css';
 import { ConstructorElement } from '@zlden/react-developer-burger-ui-components';
 import { BurgerConstructorElementUIProps } from './type';
@@ -12,16 +13,25 @@ export const BurgerConstructorElementUI: FC<BurgerConstructorElementUIProps> =
       totalItems,
       handleMoveUp,
       handleMoveDown,
-      handleClose
+      handleClose,
+      handleDragStart,
+      handleDrop,
+      handleDragOver
     }) => (
-      <li className={`${styles.element} mb-4 mr-2`}>
+      <li
+        className={clsx(styles.element, 'mb-4 mr-2')}
+        draggable
+        onDragStart={handleDragStart}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
         <MoveButton
           handleMoveDown={handleMoveDown}
           handleMoveUp={handleMoveUp}
           isUpDisabled={index === 0}
           isDownDisabled={index === totalItems - 1}
         />
-        <div className={`${styles.element_fullwidth} ml-2`}>
+        <div className={clsx(styles.element_fullwidth, 'ml-2')}>
           <ConstructorElement
             text={ingredient.name}
             price={ingredient.price}

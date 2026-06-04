@@ -4,6 +4,7 @@ import {
   ConstructorElement,
   CurrencyIcon
 } from '@zlden/react-developer-burger-ui-components';
+import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
 import { BurgerConstructorUIProps } from './type';
 import { TConstructorIngredient } from '@utils-types';
@@ -13,14 +14,21 @@ import { Preloader, OrderDetailsUI } from '@ui';
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,
   orderRequest,
+  orderError,
   price,
   orderModalData,
   onOrderClick,
-  closeOrderModal
+  closeOrderModal,
+  handleDrop,
+  handleDragOver
 }) => (
-  <section className={styles.burger_constructor}>
+  <section
+    className={styles.burger_constructor}
+    onDrop={handleDrop}
+    onDragOver={handleDragOver}
+  >
     {constructorItems.bun ? (
-      <div className={`${styles.element} mb-4 mr-4`}>
+      <div className={clsx(styles.element, 'mb-4 mr-4')}>
         <ConstructorElement
           type='top'
           isLocked
@@ -31,7 +39,11 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     ) : (
       <div
-        className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
+        className={clsx(
+          styles.noBuns,
+          styles.noBunsTop,
+          'ml-8 mb-4 mr-5 text text_type_main-default'
+        )}
       >
         Выберите булки
       </div>
@@ -49,15 +61,18 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           )
         )
       ) : (
-        <div
-          className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
+        <li
+          className={clsx(
+            styles.noBuns,
+            'ml-8 mb-4 mr-5 text text_type_main-default'
+          )}
         >
           Выберите начинку
-        </div>
+        </li>
       )}
     </ul>
     {constructorItems.bun ? (
-      <div className={`${styles.element} mt-4 mr-4`}>
+      <div className={clsx(styles.element, 'mt-4 mr-4')}>
         <ConstructorElement
           type='bottom'
           isLocked
@@ -68,14 +83,18 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     ) : (
       <div
-        className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+        className={clsx(
+          styles.noBuns,
+          styles.noBunsBottom,
+          'ml-8 mb-4 mr-5 text text_type_main-default'
+        )}
       >
         Выберите булки
       </div>
     )}
-    <div className={`${styles.total} mt-10 mr-4`}>
-      <div className={`${styles.cost} mr-10`}>
-        <p className={`text ${styles.text} mr-2`}>{price}</p>
+    <div className={clsx(styles.total, 'mt-10 mr-4')}>
+      <div className={clsx(styles.cost, 'mr-10')}>
+        <p className={clsx('text', styles.text, 'mr-2')}>{price}</p>
         <CurrencyIcon type='primary' />
       </div>
       <Button
@@ -86,6 +105,11 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         onClick={onOrderClick}
       />
     </div>
+    {orderError && (
+      <p className='text text_type_main-default text_color_error mt-4 mr-4'>
+        {orderError}
+      </p>
+    )}
 
     {orderRequest && (
       <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
