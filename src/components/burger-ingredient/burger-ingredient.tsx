@@ -1,4 +1,4 @@
-import { DragEvent, FC, memo } from 'react';
+import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { addIngredient } from '@slices';
 
@@ -15,19 +15,12 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
       dispatch(addIngredient(ingredient));
     };
 
-    const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
-      e.dataTransfer.setData('dragType', 'ingredient');
-      e.dataTransfer.setData('ingredientId', ingredient._id);
-      e.dataTransfer.effectAllowed = 'copy';
-    };
-
     return (
       <BurgerIngredientUI
         ingredient={ingredient}
         count={count}
         locationState={{ background: location }}
         handleAdd={handleAdd}
-        handleDragStart={handleDragStart}
       />
     );
   }

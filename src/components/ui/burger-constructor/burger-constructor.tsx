@@ -18,15 +18,9 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   price,
   orderModalData,
   onOrderClick,
-  closeOrderModal,
-  handleDrop,
-  handleDragOver
+  closeOrderModal
 }) => (
-  <section
-    className={styles.burger_constructor}
-    onDrop={handleDrop}
-    onDragOver={handleDragOver}
-  >
+  <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
       <div className={clsx(styles.element, 'mb-4 mr-4')}>
         <ConstructorElement

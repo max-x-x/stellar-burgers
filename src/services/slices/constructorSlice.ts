@@ -22,6 +22,8 @@ const initialState: TConstructorState = {
   orderError: null
 };
 
+type TPreparedIngredientPayload = TIngredient | TConstructorIngredient;
+
 export const createOrder = createAsyncThunk<
   Awaited<ReturnType<typeof orderBurgerApi>>,
   void,
@@ -52,16 +54,31 @@ const constructorSlice = createSlice({
   name: 'constructorBurger',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-        return;
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TPreparedIngredientPayload>) => {
+        const { payload } = action;
 
-      state.ingredients.push({
-        ...action.payload,
-        id: uuidv4()
-      });
+        if (payload.type === 'bun') {
+          state.bun = payload;
+          return;
+        }
+
+        if ('id' in payload) {
+          state.ingredients.push(payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => {
+        if (ingredient.type === 'bun') {
+          return { payload: ingredient };
+        }
+
+        return {
+          payload: {
+            ...ingredient,
+            id: uuidv4()
+          }
+        };
+      }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(

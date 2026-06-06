@@ -1,4 +1,3 @@
-import { DragEvent } from 'react';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 
 type TConstructorItems = {
@@ -14,6 +13,4 @@ export type BurgerConstructorUIProps = {
   orderModalData: TOrder | null;
   onOrderClick: () => void;
   closeOrderModal: () => void;
-  handleDrop: (e: DragEvent<HTMLElement>) => void;
-  handleDragOver: (e: DragEvent<HTMLElement>) => void;
 };

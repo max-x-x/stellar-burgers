@@ -1,13 +1,12 @@
-import { DragEvent, FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { addIngredient, clearOrderModalData, createOrder } from '@slices';
+import { clearOrderModalData, createOrder } from '@slices';
 import {
   selectConstructorItems,
   selectConstructorOrderError,
   selectConstructorOrderModalData,
   selectConstructorOrderRequest,
-  selectIngredients,
   selectIsAuthenticated
 } from '@selectors';
 import { TConstructorIngredient } from '@utils-types';
@@ -19,7 +18,6 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const ingredients = useSelector(selectIngredients);
   const constructorItems = useSelector(selectConstructorItems);
   const orderError = useSelector(selectConstructorOrderError);
   const orderRequest = useSelector(selectConstructorOrderRequest);
@@ -43,32 +41,6 @@ export const BurgerConstructor: FC = () => {
     dispatch(clearOrderModalData());
   };
 
-  const handleDragOver = (e: DragEvent<HTMLElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: DragEvent<HTMLElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const dragType = e.dataTransfer.getData('dragType');
-    if (dragType === 'constructor') {
-      return;
-    }
-
-    const ingredientId = e.dataTransfer.getData('ingredientId');
-    if (!ingredientId) {
-      return;
-    }
-
-    const ingredient = ingredients.find((item) => item._id === ingredientId);
-    if (!ingredient) {
-      return;
-    }
-
-    dispatch(addIngredient(ingredient));
-  };
-
   const price = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
@@ -88,8 +60,6 @@ export const BurgerConstructor: FC = () => {
       orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
-      handleDrop={handleDrop}
-      handleDragOver={handleDragOver}
     />
   );
 };
