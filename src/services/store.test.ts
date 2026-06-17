@@ -1,45 +1,39 @@
 import { rootReducer } from './store';
+import {
+  constructorReducer,
+  feedReducer,
+  ingredientsReducer,
+  orderReducer,
+  profileOrdersReducer,
+  userReducer
+} from '@slices';
 
 describe('rootReducer', () => {
   it('инициализирует стор корректным начальным состоянием', () => {
-    const state = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
+    const initAction = { type: '@@INIT' };
+    const state = rootReducer(undefined, initAction);
 
     expect(state).toEqual({
-      constructorBurger: {
-        bun: null,
-        ingredients: [],
-        orderRequest: false,
-        orderModalData: null,
-        orderError: null
-      },
-      ingredients: {
-        items: [],
-        isLoading: false,
-        error: null
-      },
-      feed: {
-        orders: [],
-        total: 0,
-        totalToday: 0,
-        isLoading: false,
-        error: null
-      },
-      order: {
-        currentOrder: null,
-        isLoading: false,
-        error: null
-      },
-      profileOrders: {
-        orders: [],
-        isLoading: false,
-        error: null
-      },
-      user: {
-        user: null,
-        isAuthChecked: false,
-        isLoading: false,
-        error: null
-      }
+      constructorBurger: constructorReducer(undefined, initAction),
+      ingredients: ingredientsReducer(undefined, initAction),
+      feed: feedReducer(undefined, initAction),
+      order: orderReducer(undefined, initAction),
+      profileOrders: profileOrdersReducer(undefined, initAction),
+      user: userReducer(undefined, initAction)
+    });
+  });
+
+  it('обрабатывает неизвестный экшен корректно', () => {
+    const unknownAction = { type: 'UNKNOWN_ACTION' };
+    const state = rootReducer(undefined, unknownAction);
+
+    expect(state).toEqual({
+      constructorBurger: constructorReducer(undefined, unknownAction),
+      ingredients: ingredientsReducer(undefined, unknownAction),
+      feed: feedReducer(undefined, unknownAction),
+      order: orderReducer(undefined, unknownAction),
+      profileOrders: profileOrdersReducer(undefined, unknownAction),
+      user: userReducer(undefined, unknownAction)
     });
   });
 });
